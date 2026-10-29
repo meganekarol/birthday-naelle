@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Naëlle ❤️</title>
+  <style>
+    :root {
+      --bg1: #fff7fb;
+      --bg2: #f4efff;
+      --card: rgba(255,255,255,.88);
+      --text: #342a3a;
+      --muted: #766b7c;
+      --accent: #b45aa0;
+      --accent2: #7d67c9;
+      --shadow: 0 18px 55px rgba(83, 53, 98, .16);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, #ffe8f5 0, transparent 34%),
+        radial-gradient(circle at bottom right, #e8e4ff 0, transparent 36%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      width: min(720px, 100%);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.75);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 34px 26px;
+      text-align: center;
+      animation: rise .7s ease both;
+    }
+
+    .emoji {
+      font-size: 52px;
+      margin-bottom: 8px;
+      animation: float 2.8s ease-in-out infinite;
+    }
+
+    h1, h2 {
+      margin: 0 0 14px;
+      line-height: 1.1;
+    }
+
+    h1 { font-size: clamp(2rem, 7vw, 4rem); }
+    h2 { font-size: clamp(1.6rem, 5vw, 2.5rem); }
+
+    p {
+      line-height: 1.75;
+      font-size: 1.05rem;
+      margin: 0;
+    }
+
+    .sub {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 10px 24px rgba(125, 103, 201, .25);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    button:hover { transform: translateY(-2px); }
+    button:active { transform: translateY(0); }
+
+    .hidden { display: none; }
+
+    .terminal {
+      text-align: left;
+      background: #221c2a;
+      color: #f6ecff;
+      border-radius: 18px;
+      padding: 18px;
+      font: 0.95rem/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      margin: 20px 0 8px;
+      min-height: 140px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1.05em;
+      vertical-align: -2px;
+      background: #fff;
+      margin-left: 4px;
+      animation: blink .85s steps(1) infinite;
+    }
+
+    .message {
+      text-align: left;
+      background: rgba(255,255,255,.6);
+      border-radius: 20px;
+      padding: 22px;
+      margin-top: 18px;
+    }
+
+    .signature {
+      margin-top: 18px;
+      text-align: right;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .code-love {
+      margin-top: 22px;
+      text-align: left;
+      background: #f7f2fb;
+      color: #5b4666;
+      border-radius: 16px;
+      padding: 16px 18px;
+      font: .9rem/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-x: auto;
+    }
+
+    .tiny {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px) scale(.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @media (max-width: 520px) {
+      .card { padding: 28px 18px; border-radius: 22px; }
+      p { font-size: 1rem; }
+      .message { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<div class="wrap">
+  <main class="card" id="startCard">
+    <div class="emoji">🎁</div>
+    <h1>Hey Naëlle 👀</h1>
+    <p class="sub">Someone left you a tiny birthday program.</p>
+    <button id="openBtn">Open message 💌</button>
+  </main>
+
+  <main class="card hidden" id="loadingCard">
+    <div class="emoji">💻</div>
+    <h2>Running birthday_message.py...</h2>
+    <div class="terminal" id="terminal"></div>
+  </main>
+
+  <main class="card hidden" id="messageCard">
+    <div class="emoji">🥳</div>
+    <h1>Joyeux anniversaire mon petit cafard ❤️</h1>
+    <div class="message">
+      <p>
+        Je te souhaite plein de bonheur, de réussite, d’amour et surtout une bonne santé.🥹❤️
+      </p>
+      <br />
+      <p>
+        Que cette nouvelle année de ta vie t’apporte tout ce que ton petit cœur désire. 
+        Profite bien de ta journée ma Naëlle ! Gros bisousss ❤️🥰😘
+      </p>
+      <br />
+      <div class="signature"> Megane 💕</div>
+    </div>
+
+    <div class="code-love">
+friendship.status = "upgraded" ❤️
+memories_created += 1
+
+if today == "Naëlle's birthday":
+    happiness += 1000
+    success += 1000
+    love += 1000
+
+print("Happy Birthday, Naëlle! 🎂")
+    </div>
+
+    <p class="tiny">Compiled with love, friendship</p>
+  </main>
+</div>
+
+<script>
+  const openBtn = document.getElementById('openBtn');
+  const startCard = document.getElementById('startCard');
+  const loadingCard = document.getElementById('loadingCard');
+  const messageCard = document.getElementById('messageCard');
+  const terminal = document.getElementById('terminal');
+
+  const lines = [
+    "> importing memories...",
+    "> checking friendship status...",
+    "> support_level = ∞",
+    "> adding happiness +1000",
+    "> adding success +1000",
+    "> adding love +1000",
+    "> message ready ❤️"
+  ];
+
+  openBtn.addEventListener('click', async () => {
+    startCard.classList.add('hidden');
+    loadingCard.classList.remove('hidden');
+
+    for (const line of lines) {
+      await typeLine(line);
+      await wait(260);
+    }
+
+    await wait(500);
+    loadingCard.classList.add('hidden');
+    messageCard.classList.remove('hidden');
+    burstConfetti();
+  });
+
+  function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function typeLine(text) {
+    const line = document.createElement('div');
+    terminal.appendChild(line);
+
+    for (let i = 0; i < text.length; i++) {
+      line.textContent += text[i];
+      await wait(24);
+    }
+  }
+
+  // Lightweight confetti, no external libraries.
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animationId;
+
+  function resizeCanvas() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+  }
+  addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  function burstConfetti() {
+    particles = Array.from({ length: 140 }, () => ({
+      x: innerWidth / 2,
+      y: innerHeight * 0.25,
+      vx: (Math.random() - 0.5) * 12,
+      vy: Math.random() * -8 - 4,
+      g: 0.18 + Math.random() * 0.08,
+      size: 5 + Math.random() * 7,
+      rot: Math.random() * Math.PI,
+      spin: (Math.random() - 0.5) * 0.25,
+      hue: Math.floor(Math.random() * 360),
+      life: 140 + Math.random() * 40
+    }));
+
+    cancelAnimationFrame(animationId);
+    animateConfetti();
+  }
+
+  function animateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.g;
+      p.rot += p.spin;
+      p.life -= 1;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = `hsl(${p.hue} 80% 70%)`;
+      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size * .65);
+      ctx.restore();
+    });
+
+    particles = particles.filter(p => p.life > 0 && p.y < innerHeight + 30);
+
+    if (particles.length) {
+      animationId = requestAnimationFrame(animateConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+</script>
+</body>
+</html>
